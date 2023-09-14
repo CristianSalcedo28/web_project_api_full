@@ -1,5 +1,6 @@
 import User from '../models/user.js';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export const createUser = (req, res) => {
 
@@ -18,8 +19,8 @@ export const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'super-strong-secret')
-      res.send({ token });
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret',{expiresIn: '7d'})
+      res.send({ data: user.toJSON(), token });
       if (!user) {
         return Promise.reject(new Error('Incorrect email or password'));
       }

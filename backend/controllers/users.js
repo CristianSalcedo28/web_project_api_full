@@ -20,7 +20,7 @@ export const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret',{expiresIn: '7d'})
-      res.send({ data: user.toJSON(), token });
+      res.send(token);
       if (!user) {
         return Promise.reject(new Error('Incorrect email or password'));
       }

@@ -1,7 +1,7 @@
 import User from '../models/user.js';
 import bcrypt from 'bcryptjs'
 
-const createUser = (req, res) => {
+export const createUser = (req, res) => {
 
   bcrypt.hash(req.body.password, 10)
   .then(hash => User.create({
@@ -13,9 +13,34 @@ const createUser = (req, res) => {
   .catch((err) => res.status(400).send(err));
 };
 
-const login = (req, res, next) => {
+export const login = (req, res, next) => {
   const { email, password } = req.body;
-}
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret')
+      res.send({ token });
+      if (!user) {
+        return Promise.reject(new Error('Incorrect email or password'));
+      }
+
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+      // los hashes no coinciden, se rechaza el promise
+        return Promise.reject(new Error('Incorrect email or password'));
+      }
+
+      // autenticación exitosa
+      res.send({ message: '¡Todo bien!' });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
+  };
 
 export const getUsers = async (req, res) => {
   try {

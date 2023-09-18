@@ -57,6 +57,11 @@ export const createUser = async (req, res) => {
     return res.send({ data: newUser });
   } catch (err) {
     if (err.name === 'ValidationError') {
+    //   next(new BadRequestError(err.message));
+    // } else {
+    //   next(err);
+    // }
+    //  {
       return res.status(400).send({ message: 'Se pasaron datos incorrectos' });
     }
     return res.status(500).send({ message: 'Ha ocurrido un error en el servidor', err });
@@ -107,8 +112,12 @@ export const login = async (req, res) => {
     }
 
     const token = await generateAuthToken(user);
-    return res.send({ token });
-  } catch (err) {
+    return res.send({ token });}
+  //  .catch(() => {
+  //   // authentication error
+  //   next(new AuthenticationError('Incorrect email or password lalalala'));
+  // });
+    catch (err) {
     return res.status(401).send({ message: 'Email o contraseña incorrectos' });
   }
 };

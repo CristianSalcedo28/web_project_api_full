@@ -1,47 +1,7 @@
-import User from '../models/user.js';
+/* eslint-disable import/no-extraneous-dependencies */
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-
-export const createUser = (req, res) => {
-
-  bcrypt.hash(req.body.password, 10)
-  .then(hash => User.create({
-    email: req.body.email,
-    password: hash, // añadir el hash a la base de datos
-    name: req.body.name,
-  }))
-  .then((user) => res.send(user))
-  .catch((err) => res.status(400).send(err));
-};
-
-export const login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'super-strong-secret',{expiresIn: '7d'})
-      res.send(token);
-      if (!user) {
-        return Promise.reject(new Error('Incorrect email or password'));
-      }
-
-      return bcrypt.compare(password, user.password);
-    })
-    .then((matched) => {
-      if (!matched) {
-      // los hashes no coinciden, se rechaza el promise
-        return Promise.reject(new Error('Incorrect email or password'));
-      }
-
-      // autenticación exitosa
-      res.send({ message: '¡Todo bien!' });
-    })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
-  };
+import User from '../models/user.js';
+import { generateAuthToken } from '../utils/utils.js';
 
 export const getUsers = async (req, res) => {
   try {
@@ -68,16 +28,38 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const postUser = async (req, res) => {
+const isUserExist = async (email) => {
+  let user;
   try {
-    const { name, about, avatar } = req.body;
-    const newUser = await User.create({ name, about, avatar });
+    user = await User.findOne({ email });
+  } catch (err) {
+    return new Error('Ha ocurrido un error en el servidor al buscar el usuario');
+  }
+  return !!user;
+};
+
+const hashPassword = async (password) => bcrypt.hash(password, 10);
+
+export const createUser = async (req, res) => {
+  try {
+    const {
+      email, password, name, about, avatar,
+    } = req.body;
+
+    const userExist = await isUserExist(email);
+    if (userExist) {
+      return res.status(409).send({ message: 'Ya existe un usuario con ese email' });
+    }
+    const passwordHash = await hashPassword(password);
+    const newUser = await User.create({
+      email, password: passwordHash, name, about, avatar,
+    });
     return res.send({ data: newUser });
   } catch (err) {
     if (err.name === 'ValidationError') {
       return res.status(400).send({ message: 'Se pasaron datos incorrectos' });
     }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor', err });
   }
 };
 
@@ -112,5 +94,21 @@ export const updateAvatar = async (req, res) => {
       return res.status(404).send({ message: 'No se ha encontrado un usuario con ese ID' });
     }
     return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+  }
+};
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findUserByCredentials(email, password);
+
+    if (user && user instanceof Error) {
+      return res.status(401).send({ message: user.message });
+    }
+
+    const token = await generateAuthToken(user);
+    return res.send({ token });
+  } catch (err) {
+    return res.status(401).send({ message: 'Email o contraseña incorrectos' });
   }
 };

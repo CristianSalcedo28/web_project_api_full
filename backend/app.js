@@ -13,21 +13,14 @@ mongoose.connect('mongodb://127.0.0.1:27017/aroundb')
 
 const app = express();
 app.use(express.json());
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64c4594b04781cede2c5c87a', // pega el _id del usuario de prueba que creamos en el paso anterior
-  };
-
-  next();
-});
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/users', users);
 app.use('/cards', cards);
-
 app.get('/', (req, res) => {
-  res.status(500).send({ message: 'An error has ocurred on the server' });
+  res.send('Hello World!');
 });
+
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });

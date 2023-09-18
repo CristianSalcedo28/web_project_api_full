@@ -6,10 +6,11 @@ import {
   likeCard,
   dislikeCard,
 } from '../controllers/cards.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/', getCards);
+router.get('/', auth, getCards);
 router.post('/', postCard);
 router.delete('/:cardId', deleteCardById);
 router.put('/:cardId/likes', likeCard);

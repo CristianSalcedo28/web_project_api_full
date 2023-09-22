@@ -7,13 +7,14 @@ import {
   updateAvatar,
   login,
 } from '../controllers/users.js';
+import { validateCreateUser, validateLogin } from '../middlewares/validation.js';
 
 const router = express.Router();
 
 router.get('/', getUsers);
 router.get('/:userId', getUserById);
-router.post('/', createUser);
-router.post('/signin', login);
+router.post('/', validateCreateUser, createUser);
+router.post('/signin', validateLogin, login);
 router.patch('/me', updateUser);
 router.patch('/me/avatar', updateAvatar);
 

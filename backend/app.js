@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import users from './routes/users.js';
 import cards from './routes/cards.js';
 import errors from 'celebrate';
-import { celebrate } from 'celebrate';
+import celebrate from 'celebrate';
 import { requestLogger, errorLogger } from './middlewares/logger.js';
 
 mongoose.connect('mongodb://127.0.0.1:27017/aroundb')
@@ -28,7 +28,9 @@ app.get('/', (req, res) => {
 
 app.use(errorLogger); // the error logger
 
-//app.use(errors());// controlador de errores de celebrate
+app.use(errors());// controlador de errores de celebrate
+
+app.use(error);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

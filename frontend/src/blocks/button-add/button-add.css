@@ -1,0 +1,28 @@
+.button-add {
+  width: 150px;
+  height: 50px;
+  border-radius: 2px;
+  border-style: hidden;
+  background-color: transparent;
+  color: #FFFFFF;
+  background-image: url(../../images/Add_Button.svg);
+  background-repeat: no-repeat;
+  cursor: pointer;
+  grid-column: 5/6;
+  grid-row: 1/2;
+  margin-top: 35px;
+}
+
+.button-add:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 879px) {
+  .button-add {
+  background-image: url(../../images/Add_Button-mobile.svg);
+  width: 282px;
+  height: 50px;
+  grid-column: 1/2;
+  grid-row: 4/5;
+  }
+}

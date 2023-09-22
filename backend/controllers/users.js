@@ -8,7 +8,7 @@ export const getUsers = async (req, res) => {
     const usersList = await User.find();
     return res.send({ data: usersList });
   } catch (err) {
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    return ServerError('Ha ocurrido un error en el servidor');
   }
 };
 
@@ -57,14 +57,9 @@ export const createUser = async (req, res) => {
     return res.send({ data: newUser });
   } catch (err) {
     if (err.name === 'ValidationError') {
-    //   next(new BadRequestError(err.message));
-    // } else {
-    //   next(err);
-    // }
-    //  {
-      return res.status(400).send({ message: 'Se pasaron datos incorrectos' });
+      return BadRequestError('Se pasaron datos incorrectos');
     }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor', err });
+    return ServerError('Ha ocurrido un error en el servidor', err);
   }
 };
 
@@ -76,12 +71,12 @@ export const updateUser = async (req, res) => {
     return res.send({ data: updatedUser });
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).send({ message: 'ID con formato incorrecto' });
+      return BadRequestError('ID con formato incorrecto');
     }
     if (err.name === 'DocumentNotFoundError') {
-      return res.status(404).send({ message: 'No se ha encontrado un usuario con ese ID' });
+      return NotFoundError('No se ha encontrado un usuario con ese ID');
     }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    return ServerError('Ha ocurrido un error en el servidor');
   }
 };
 
@@ -93,12 +88,12 @@ export const updateAvatar = async (req, res) => {
     return res.send({ data: updatedAvatar });
   } catch (err) {
     if (err.name === 'CastError') {
-      return res.status(400).send({ message: 'ID con formato incorrecto' });
+      return BadRequestError('ID con formato incorrecto');
     }
     if (err.name === 'DocumentNotFoundError') {
-      return res.status(404).send({ message: 'No se ha encontrado un usuario con ese ID' });
+      return NotFoundError('No se ha encontrado un usuario con ese ID');
     }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    return ServerError('Ha ocurrido un error en el servidor');
   }
 };
 
@@ -108,16 +103,13 @@ export const login = async (req, res) => {
     const user = await User.findUserByCredentials(email, password);
 
     if (user && user instanceof Error) {
-      return res.status(401).send({ message: user.message });
+      return AuthenticationError(user.message);
     }
 
     const token = await generateAuthToken(user);
-    return res.send({ token });}
-  //  .catch(() => {
-  //   // authentication error
-  //   next(new AuthenticationError('Incorrect email or password lalalala'));
-  // });
+    return res.send({ token })
+    ;}
     catch (err) {
-    return res.status(401).send({ message: 'Email o contraseña incorrectos' });
-  }
+      return AuthenticationError('Email o contraseña incorrectos')
+    }
 };

@@ -1,0 +1,29 @@
+.button-edit {
+  width: 24px;
+  height: 24px;
+  border-style: hidden;
+  background-image: url(../../images/Edit_Button.svg);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  color: #FFFFFF;
+  background-color: transparent;
+  cursor: pointer;
+  padding-top: 60px;
+  }
+
+  .button-edit:hover {
+    opacity: 0.6;
+  }
+
+@media screen and (max-width: 879px) {
+  .button-edit {
+    background-image: url(../../images/Edit_Button-mobile.svg);
+    width: 18px;
+    height: 18px;
+    grid-column: 1/2;
+    grid-row: 3/4;
+    justify-self: right;
+    padding-top: 44px;
+    padding-left: 55px;
+  }
+}

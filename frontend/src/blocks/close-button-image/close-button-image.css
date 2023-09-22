@@ -1,0 +1,30 @@
+.close-button-image {
+    height: 40px;
+    width: 40px;
+    font-weight: normal;
+    position: absolute;
+    right: -45px;
+    top: -41px;
+    cursor: pointer;
+    background-image: url(../../images/Close_Icon.svg);
+    background-color: transparent;
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    border: none;
+  }
+
+  .close-button-image:hover {
+    opacity: 0.6;
+  }
+
+  @media screen and (max-width: 879px) {
+    .close-button-image {
+      background-image: url(../../images/Close_Icon-mobile.svg);
+      height: 26px;
+      width: 26px;
+      right: -28px;
+      top: -24px;
+      border: 0;
+    }
+  }

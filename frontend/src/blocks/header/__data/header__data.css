@@ -1,0 +1,10 @@
+.header__data{
+    display: flex;
+    flex-wrap: wrap; 
+  }
+
+@media screen and (max-width: 631px) {
+  .header__data {
+      justify-content: center;
+  }
+}

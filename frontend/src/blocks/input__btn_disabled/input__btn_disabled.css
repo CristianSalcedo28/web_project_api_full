@@ -1,0 +1,8 @@
+.input__btn_disabled {
+  background: #ffffff;
+  color: #CCCCCC;
+}
+
+.input__btn_disabled:hover {
+  cursor: default;
+}

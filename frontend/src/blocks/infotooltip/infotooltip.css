@@ -1,0 +1,17 @@
+.infotooltip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 430px;
+  height: 330px;
+}
+
+@media screen and (max-width: 879px) {
+  .infotooltip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 330px;
+  }
+}

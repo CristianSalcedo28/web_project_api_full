@@ -1,0 +1,8 @@
+.popup__item-error {
+  font: Inter;
+  font-weight: 400px;
+  font-size: 12px;
+  line-height: 14,52px;
+  color: red;
+  margin-top: 6px;
+}

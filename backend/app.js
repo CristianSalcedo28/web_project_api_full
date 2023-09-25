@@ -2,9 +2,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import users from './routes/users.js';
 import cards from './routes/cards.js';
-import errors from 'celebrate';
-import celebrate from 'celebrate';
+import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from './middlewares/error.js';
+import { errors } from 'celebrate';
+import  celebrate  from 'celebrate';
 import { requestLogger, errorLogger } from './middlewares/logger.js';
+import { auth } from './middlewares/auth.js';
+
+//require('dotenv').config();
 
 mongoose.connect('mongodb://127.0.0.1:27017/aroundb')
   .then(() => {
@@ -20,17 +24,19 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger); // the request logger
 
+app.use(auth);
+
 app.use('/users', users);
 app.use('/cards', cards);
 app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+   res.send('Hello World!');
+ });
 
 app.use(errorLogger); // the error logger
 
 app.use(errors());// controlador de errores de celebrate
 
-app.use(error);
+//app.use(error);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

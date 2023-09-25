@@ -2,6 +2,8 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 import { generateAuthToken } from '../utils/utils.js';
+//import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from './middlewares/error.js';
+
 
 export const getUsers = async (req, res) => {
   try {
@@ -59,7 +61,7 @@ export const createUser = async (req, res) => {
     if (err.name === 'ValidationError') {
       return BadRequestError('Se pasaron datos incorrectos');
     }
-    return ServerError('Ha ocurrido un error en el servidor', err);
+    return ServerError('Ha ocurrido un error en el servidor');
   }
 };
 

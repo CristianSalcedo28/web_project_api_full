@@ -2,7 +2,7 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 import { generateAuthToken } from '../utils/utils.js';
-//import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from './middlewares/error.js';
+import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from '../middlewares/error.js';
 
 
 export const getUsers = async (req, res) => {
@@ -58,6 +58,7 @@ export const createUser = async (req, res) => {
     });
     return res.send({ data: newUser });
   } catch (err) {
+    console.log(err)
     if (err.name === 'ValidationError') {
       return BadRequestError('Se pasaron datos incorrectos');
     }

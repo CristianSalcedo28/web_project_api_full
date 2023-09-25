@@ -40,5 +40,7 @@ export const validateCreateUser = celebrate({
       'string.max': 'The maximum lenght of the "name" field is 30',
       'string.empty': 'The "name" filed must be filled in',
     }),
+    about: Joi.string(),
+    avatar: Joi.string()
   }),
 });

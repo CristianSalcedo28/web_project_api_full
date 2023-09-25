@@ -2,11 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import users from './routes/users.js';
 import cards from './routes/cards.js';
-import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from './middlewares/error.js';
 import { errors } from 'celebrate';
-import  celebrate  from 'celebrate';
 import { requestLogger, errorLogger } from './middlewares/logger.js';
 import { auth } from './middlewares/auth.js';
+import {
+  createUser,
+  login,
+} from './controllers/users.js';
+import { validateCreateUser, validateLogin } from './middlewares/validation.js';
+
 
 //require('dotenv').config();
 
@@ -23,6 +27,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger); // the request logger
+
+app.post('/register', validateCreateUser, createUser);
+app.post('/login', validateLogin, login);
 
 app.use(auth);
 

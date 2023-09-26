@@ -27,9 +27,15 @@ function App() {
   const [status, setStatus] = React.useState(true);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem('jwt', token)
+  },[token])
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    const isLoggedIn = localStorage.getItem('jwt')
+    setIsLoggedIn(isLoggedIn !== undefined);
   };
 
   const handleLogout = () => {
@@ -137,6 +143,7 @@ function App() {
     authorize(email, password)
       .then((res) => {
         if (res.token) {
+          setToken(res.token)
           handleLogin();
           setEmail(email);
           navigate("/");

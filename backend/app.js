@@ -10,7 +10,7 @@ import {
   login,
 } from './controllers/users.js';
 import { validateCreateUser, validateLogin } from './middlewares/validation.js';
-
+import cors from 'cors';
 
 //require('dotenv').config();
 
@@ -23,9 +23,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/aroundb')
   });
 
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 app.use(requestLogger); // the request logger
 
 app.post('/register', validateCreateUser, createUser);

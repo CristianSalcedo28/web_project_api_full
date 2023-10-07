@@ -1,3 +1,5 @@
+import api from "./api";
+
 const checkErrors = (res) => {
   if (res.ok) {
     return res.json();
@@ -5,7 +7,7 @@ const checkErrors = (res) => {
   return Promise.reject(res.status);
 };
 
-export const BASE_URL = "https://register.nomoreparties.co";
+export const BASE_URL = "http://localhost:3000";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -34,6 +36,7 @@ export const authorize = (email, password) => {
     .then(checkErrors)
     .then((data) => {
       if (data.token) {
+        api.setToken(data.token)
         localStorage.setItem("jwt", data.token);
         return data;
       }

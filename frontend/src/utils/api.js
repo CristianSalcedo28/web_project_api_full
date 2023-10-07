@@ -4,6 +4,13 @@ export class Api {
     this._headers = headers;
   }
 
+  setToken(token) {
+    this._headers = {
+      'authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+  }
+  
   _handleResponse(res) {
     if (!res.ok) {
       throw new Error(`Error: ${res.status}`);
@@ -70,11 +77,10 @@ export class Api {
   }
 }
 
-const token = localStorage.getItem('jwt')
+//const token = localStorage.getItem('jwt')
 const api = new Api({
-baseUrl: 'https://around.nomoreparties.co/v1/web_es_cohort_03',
+baseUrl: 'http://localhost:3000',
 headers: {
-  authorization: `12f0e9bd-a113-4001-9763-cce8c5e105dc`,
   'Content-Type': 'application/json',
 },
 });

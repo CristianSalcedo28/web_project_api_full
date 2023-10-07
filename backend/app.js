@@ -29,8 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(requestLogger); // the request logger
 
-app.post('/register', validateCreateUser, createUser);
-app.post('/login', validateLogin, login);
+app.post('/signup', validateCreateUser, createUser);
+app.post('/signin', validateLogin, login);
 
 app.use(auth);
 

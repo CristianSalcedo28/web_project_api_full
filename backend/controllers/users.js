@@ -16,8 +16,8 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const getUser = await User.findById(userId).orFail();
+    const { _id } = req.user;
+    const getUser = await User.findById(_id).orFail();
     return res.send({ data: getUser });
   } catch (err) {
     if (err.name === 'CastError') {

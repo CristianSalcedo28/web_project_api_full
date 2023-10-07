@@ -29,10 +29,6 @@ function App() {
   const navigate = useNavigate();
   const [token, setToken] = useState(null);
 
-  useEffect(() => {
-    localStorage.setItem('jwt', token)
-  },[token])
-
   const handleLogin = () => {
     const isLoggedIn = localStorage.getItem('jwt')
     setIsLoggedIn(isLoggedIn !== undefined);
@@ -45,16 +41,20 @@ function App() {
   };
 
   useEffect(() => {
+    if (token) { 
     api.getInitialCards().then((res) => {
       setCards(res);
     });
-  }, []);
+  }
+  }, [token]);
 
   useEffect(() => {
+    if (token) { 
     api.getUserInfo().then((res) => {
-      setCurrentUser(res);
+      setCurrentUser(res.data);
     });
-  }, []);
+  }
+  }, [token]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -166,11 +166,13 @@ function App() {
     function handleTokenCheck() {
       if (localStorage.getItem("jwt")) {
         const jwt = localStorage.getItem("jwt");
+        api.setToken(jwt)
         getContent(jwt)
           .then((res) => {
             if (res) {
               handleLogin();
               setEmail(res.data.email);
+              setCurrentUser(res.data)
               navigate("/");
               setIsLoggedIn(true);
             }
@@ -212,6 +214,7 @@ function App() {
                 cards={cards}
                 onCardLike={handleCardLike}
                 onCardDelete={handleCardDelete}
+                currentUser={currentUser}
               />
             </ProtectedRoute>
           }

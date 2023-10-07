@@ -30,7 +30,7 @@ function Main(props) {
             <div className="profile__avatar">
               <img
                 alt="Foto del Usuario"
-                src={currentUser.avatar}
+                src={props.currentUser?.avatar}
                 className="profile__avatar-btn"
               />
               <div
@@ -39,8 +39,8 @@ function Main(props) {
               ></div>
             </div>
             <div className="profile__info">
-              <p className="profile__name">{currentUser.name}</p>
-              <p className="profile__profession">{currentUser.about}</p>
+              <p className="profile__name">{props.currentUser?.name}</p>
+              <p className="profile__profession">{props.currentUser?.about}</p>
             </div>
             <button
               type="button"

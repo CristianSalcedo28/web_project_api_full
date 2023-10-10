@@ -172,7 +172,7 @@ function App() {
             if (res) {
               handleLogin();
               setEmail(res.data.email);
-              setCurrentUser(res.data)
+              setCurrentUser(res.data);
               navigate("/");
               setIsLoggedIn(true);
             }

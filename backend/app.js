@@ -29,6 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(requestLogger); // the request logger
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('El servidor va a caer');
+  }, 0);
+});
+
 app.post('/signup', validateCreateUser, createUser);
 app.post('/signin', validateLogin, login);
 
@@ -43,8 +49,6 @@ app.get('/', (req, res) => {
 app.use(errorLogger); // the error logger
 
 app.use(errors());// controlador de errores de celebrate
-
-//app.use(error);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

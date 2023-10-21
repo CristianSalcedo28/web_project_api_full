@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable import/prefer-default-export */
 import jwt from 'jsonwebtoken';
 const { NODE_ENV, JWT_SECRET } = process.env; // ver esto
 

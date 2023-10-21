@@ -3,24 +3,24 @@ import Card from '../models/card.js';
 export const getCards = async (req, res) => {
   try {
     const cardsList = await Card.find();
-    return res.send({ data: cardsList });
+    return res.send(cardsList);
   } catch (err) {
     return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
   }
 };
 
 export const postCard = async (req, res) => {
+  const { name, link } = req.body;
+  const { _id } = req.user;
+
   try {
-    const { name, link } = req.body;
-    const newCard = await Card.create({ name, link, owner: req.user._id });
-    return res.send({ data: newCard });
-  } catch (err) {
-    if (err.name === 'ValidationError') {
-      return res.status(400).send({ message: 'Se pasaron datos incorrectos' });
-    }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    const newCard = await Card.create({ name, link, owner: _id });
+    return res.status(201).json(newCard);
+  } catch (error) {
+    return res.status(400).send('Error al crear la card', error);
   }
 };
+
 export const deleteCardById = async (req, res) => {
   try {
     const { cardId } = req.params;
@@ -44,13 +44,15 @@ export const deleteCardById = async (req, res) => {
 export const likeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
+    console.log(cardId)
     const likedCard = await Card.findByIdAndUpdate(
       cardId,
       { $addToSet: { likes: req.user._id } },
       { new: true },
     ).orFail();
-    return res.send({ data: likedCard });
+    return res.send(likedCard);
   } catch (err) {
+    console.log(err)
     if (err.name === 'CastError') {
       return res.status(400).send({ message: 'ID con formato incorrecto' });
     }
@@ -69,7 +71,7 @@ export const dislikeCard = async (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     ).orFail();
-    return res.send({ data: dislikedCard });
+    return res.send(dislikedCard);
   } catch (err) {
     if (err.name === 'CastError') {
       return res.status(400).send({ message: 'ID con formato incorrecto' });

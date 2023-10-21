@@ -57,7 +57,7 @@ function App() {
   }, [token]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
     });
@@ -75,7 +75,7 @@ function App() {
 
   function handleUpdateUser(name, about) {
     api.setUserInfo(name, about).then((data) => {
-      setCurrentUser(data);
+      setCurrentUser(data.data);
       handleClosePopup();
     });
   }
@@ -175,6 +175,7 @@ function App() {
               setCurrentUser(res.data);
               navigate("/");
               setIsLoggedIn(true);
+              setToken(jwt)
             }
           })
           .catch((err) => {

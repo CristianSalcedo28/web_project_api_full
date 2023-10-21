@@ -54,7 +54,7 @@ export const createUser = async (req, res) => {
     }
     const passwordHash = await hashPassword(password);
     const newUser = await User.create({
-      email, password: passwordHash, name, about, avatar,
+      email, password: passwordHash
     });
     return res.send({ data: newUser });
   } catch (err) {
@@ -88,7 +88,7 @@ export const updateAvatar = async (req, res) => {
     const { avatar } = req.body;
     const updatedAvatar = await User
       .findByIdAndUpdate(req.user._id, { avatar }, { new: true }).orFail();
-    return res.send({ data: updatedAvatar });
+    return res.send(updatedAvatar);
   } catch (err) {
     if (err.name === 'CastError') {
       return BadRequestError('ID con formato incorrecto');

@@ -44,7 +44,6 @@ export const deleteCardById = async (req, res) => {
 export const likeCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    console.log(cardId)
     const likedCard = await Card.findByIdAndUpdate(
       cardId,
       { $addToSet: { likes: req.user._id } },
@@ -52,7 +51,6 @@ export const likeCard = async (req, res) => {
     ).orFail();
     return res.send(likedCard);
   } catch (err) {
-    console.log(err)
     if (err.name === 'CastError') {
       return res.status(400).send({ message: 'ID con formato incorrecto' });
     }

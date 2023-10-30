@@ -2,8 +2,12 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 import { generateAuthToken } from '../utils/utils.js';
-import { BadRequestError, AuthenticationError, NotFoundError, ServerError } from '../middlewares/error.js';
-
+import {
+  BadRequestError,
+  AuthenticationError,
+  NotFoundError,
+  ServerError,
+} from '../middlewares/error.js';
 
 export const getUsers = async (req, res) => {
   try {
@@ -24,9 +28,13 @@ export const getUserById = async (req, res) => {
       return res.status(400).send({ message: 'ID con formato incorrecto' });
     }
     if (err.name === 'DocumentNotFoundError') {
-      return res.status(404).send({ message: 'No se ha encontrado un usuario con ese ID' });
+      return res
+        .status(404)
+        .send({ message: 'No se ha encontrado un usuario con ese ID' });
     }
-    return res.status(500).send({ message: 'Ha ocurrido un error en el servidor' });
+    return res
+      .status(500)
+      .send({ message: 'Ha ocurrido un error en el servidor' });
   }
 };
 
@@ -35,7 +43,9 @@ const isUserExist = async (email) => {
   try {
     user = await User.findOne({ email });
   } catch (err) {
-    return new Error('Ha ocurrido un error en el servidor al buscar el usuario');
+    return new Error(
+      'Ha ocurrido un error en el servidor al buscar el usuario',
+    );
   }
   return !!user;
 };
@@ -44,21 +54,21 @@ const hashPassword = async (password) => bcrypt.hash(password, 10);
 
 export const createUser = async (req, res) => {
   try {
-    const {
-      email, password, name, about, avatar,
-    } = req.body;
+    const { email, password } = req.body;
 
     const userExist = await isUserExist(email);
     if (userExist) {
-      return res.status(409).send({ message: 'Ya existe un usuario con ese email' });
+      return res
+        .status(409)
+        .send({ message: 'Ya existe un usuario con ese email' });
     }
     const passwordHash = await hashPassword(password);
     const newUser = await User.create({
-      email, password: passwordHash
+      email,
+      password: passwordHash,
     });
     return res.send({ data: newUser });
   } catch (err) {
-    console.log(err)
     if (err.name === 'ValidationError') {
       return BadRequestError('Se pasaron datos incorrectos');
     }
@@ -69,8 +79,11 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { name, about } = req.body;
-    const updatedUser = await User
-      .findByIdAndUpdate(req.user._id, { name, about }, { new: true }).orFail();
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, about },
+      { new: true },
+    ).orFail();
     return res.send({ data: updatedUser });
   } catch (err) {
     if (err.name === 'CastError') {
@@ -86,8 +99,11 @@ export const updateUser = async (req, res) => {
 export const updateAvatar = async (req, res) => {
   try {
     const { avatar } = req.body;
-    const updatedAvatar = await User
-      .findByIdAndUpdate(req.user._id, { avatar }, { new: true }).orFail();
+    const updatedAvatar = await User.findByIdAndUpdate(
+      req.user._id,
+      { avatar },
+      { new: true },
+    ).orFail();
     return res.send(updatedAvatar);
   } catch (err) {
     if (err.name === 'CastError') {
@@ -110,9 +126,8 @@ export const login = async (req, res) => {
     }
 
     const token = await generateAuthToken(user);
-    return res.send({ token })
-    ;}
-    catch (err) {
-      return AuthenticationError('Email o contraseña incorrectos')
-    }
+    return res.send({ token });
+  } catch (err) {
+    return AuthenticationError('Email o contraseña incorrectos');
+  }
 };

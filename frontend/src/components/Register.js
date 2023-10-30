@@ -28,7 +28,6 @@ function Register({ onRegister }) {
           name="email"
           type="email"
           placeholder="Email"
-//        value={email}
           onChange={handleChangeEmail}
           required
         />
@@ -38,7 +37,6 @@ function Register({ onRegister }) {
           name="password"
           type="password"
           placeholder="Password"
-//        value={password}
           onChange={handleChangePassword}
           required
         />

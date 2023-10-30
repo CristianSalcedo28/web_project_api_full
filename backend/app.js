@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import express from 'express';
 import mongoose from 'mongoose';
+import { errors } from 'celebrate';
+import cors from 'cors';
 import users from './routes/users.js';
 import cards from './routes/cards.js';
-import { errors } from 'celebrate';
 import { requestLogger, errorLogger } from './middlewares/logger.js';
 import { auth } from './middlewares/auth.js';
 import {
@@ -10,9 +12,6 @@ import {
   login,
 } from './controllers/users.js';
 import { validateCreateUser, validateLogin } from './middlewares/validation.js';
-import cors from 'cors';
-
-//require('dotenv').config();
 
 mongoose.connect('mongodb://127.0.0.1:27017/aroundb')
   .then(() => {
@@ -27,7 +26,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(requestLogger); // the request logger
+app.use(requestLogger);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -43,12 +42,12 @@ app.use(auth);
 app.use('/users', users);
 app.use('/cards', cards);
 app.get('/', (req, res) => {
-   res.send('Hello World!');
- });
+  res.send('Hello World!');
+});
 
-app.use(errorLogger); // the error logger
+app.use(errorLogger);
 
-app.use(errors());// controlador de errores de celebrate
+app.use(errors());
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

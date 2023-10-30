@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable import/no-extraneous-dependencies */
 import mongoose from 'mongoose';
 import validator from 'validator';

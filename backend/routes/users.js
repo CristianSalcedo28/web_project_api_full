@@ -2,12 +2,9 @@ import express from 'express';
 import {
   getUsers,
   getUserById,
-  createUser,
   updateUser,
   updateAvatar,
-  login,
 } from '../controllers/users.js';
-import { validateCreateUser, validateLogin } from '../middlewares/validation.js';
 
 const router = express.Router();
 

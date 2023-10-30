@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { celebrate, Joi } from 'celebrate';
 import validator from 'validator';
 
@@ -41,6 +42,6 @@ export const validateCreateUser = celebrate({
       'string.empty': 'The "name" filed must be filled in',
     }),
     about: Joi.string(),
-    avatar: Joi.string()
+    avatar: Joi.string(),
   }),
 });

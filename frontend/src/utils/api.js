@@ -28,42 +28,34 @@ export class Api {
     });
   }
 
-  //para obtener las tarjetas iniciales
   getInitialCards() {
     return this._useFetch('GET', `${this._baseUrl}/cards`);
   }
 
-  //para obtener los datos del usuario actual
   getUserInfo() {
     return this._useFetch('GET', `${this._baseUrl}/users/me`);
   }
 
-  //para actualizar los datos del usuario actual con el nombre y descripción especificados.
   setUserInfo({name, about}) {
     return this._useFetch('PATCH', `${this._baseUrl}/users/me`, {name, about});
   }
 
-  //addCard hara una petición POST al endpoint para crear una nueva tarjeta con el nombre y link especificados.
   addCard({name, link}) {
     return this._useFetch('POST', `${this._baseUrl}/cards`, {name, link});
   }
 
-  //para eliminar la tarjeta con el id especificado.
   removeCard(cardId) {
     return this._useFetch('DELETE', `${this._baseUrl}/cards/${cardId}`);
   }
 
-  //para actualizar el avatar del usuario actual con el link especificado.
   setUserAvatar(avatar) {
     return this._useFetch('PATCH', `${this._baseUrl}/users/me/avatar`, avatar);
   }
 
-  //para agregar un like a la tarjeta con el id especificado.
   addLike(cardId) {
     return this._useFetch('PUT', `${this._baseUrl}/cards/likes/${cardId}`);
   }
 
-  //para eliminar el like a la tarjeta con el id especificado.
   removeLike(cardId) {
     return this._useFetch('DELETE', `${this._baseUrl}/cards/likes/${cardId}`);
   }
@@ -77,7 +69,6 @@ export class Api {
   }
 }
 
-//const token = localStorage.getItem('jwt')
 const api = new Api({
 baseUrl: 'http://localhost:3000',
 headers: {

@@ -1,5 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 import jwt from 'jsonwebtoken';
-const { NODE_ENV, JWT_SECRET } = process.env; // ver esto
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 export const auth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -10,7 +12,7 @@ export const auth = async (req, res, next) => {
   const token = authorization.replace('Bearer ', '');
 
   try {
-    const payload = await jwt.verify(token,  NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+    const payload = await jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
 
     if (!payload) {
       return res.status(403).send({ message: 'El token no es válido' });

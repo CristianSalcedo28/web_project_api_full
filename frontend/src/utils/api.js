@@ -1,16 +1,19 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-underscore-dangle */
 export class Api {
-  constructor({baseUrl, headers}) {
+  constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
 
   setToken(token) {
     this._headers = {
-      'authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     };
   }
-  
+
   _handleResponse(res) {
     if (!res.ok) {
       throw new Error(`Error: ${res.status}`);
@@ -18,14 +21,12 @@ export class Api {
     return res.json();
   }
 
-  _useFetch( method, url, body) {
+  _useFetch(method, url, body) {
     return fetch(url, {
-      method: method,
+      method,
       headers: this._headers,
       body: body ? JSON.stringify(body) : undefined,
-    }).then((res) => {
-      return this._handleResponse(res);
-    });
+    }).then((res) => this._handleResponse(res));
   }
 
   getInitialCards() {
@@ -36,12 +37,12 @@ export class Api {
     return this._useFetch('GET', `${this._baseUrl}/users/me`);
   }
 
-  setUserInfo({name, about}) {
-    return this._useFetch('PATCH', `${this._baseUrl}/users/me`, {name, about});
+  setUserInfo({ name, about }) {
+    return this._useFetch('PATCH', `${this._baseUrl}/users/me`, { name, about });
   }
 
-  addCard({name, link}) {
-    return this._useFetch('POST', `${this._baseUrl}/cards`, {name, link});
+  addCard({ name, link }) {
+    return this._useFetch('POST', `${this._baseUrl}/cards`, { name, link });
   }
 
   removeCard(cardId) {
@@ -63,17 +64,16 @@ export class Api {
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked === true) {
       return this._useFetch('PUT', `${this._baseUrl}/cards/likes/${cardId}`);
-    } else {
-      return this._useFetch('DELETE', `${this._baseUrl}/cards/likes/${cardId}`);
     }
+    return this._useFetch('DELETE', `${this._baseUrl}/cards/likes/${cardId}`);
   }
 }
 
 const api = new Api({
-baseUrl: 'http://localhost:3000',
-headers: {
-  'Content-Type': 'application/json',
-},
+  baseUrl: 'http://localhost:3000',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-export default api
+export default api;

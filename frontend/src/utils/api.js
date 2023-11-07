@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-underscore-dangle */
 export class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
@@ -70,7 +67,7 @@ export class Api {
 }
 
 const api = new Api({
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://api.wdtt.chickenkiller.com',
   headers: {
     'Content-Type': 'application/json',
   },

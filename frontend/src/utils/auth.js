@@ -7,7 +7,7 @@ const checkErrors = (res) => {
   return Promise.reject(res.status);
 };
 
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://api.wdtt.chickenkiller.com";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
